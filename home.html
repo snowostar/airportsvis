@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+    <style>
+        .active { fill: blue !important;}
+        /*.datamaps-key dt, .datamaps-key dd {float: none !important;}
+        .datamaps-key {right: -50px; top: 0;}*/
+    </style>
+    <h1>Airports visulization by using the D3.js Datamap</h1>
+</head>
+<body>
+  <script src="https://d3js.org/d3.v3.min.js"></script>
+  <script src="https://d3js.org/topojson.v1.min.js"></script>
+  <!-- I recommend you host this file on your own, since this will change without warning -->
+  <script src="http://datamaps.github.io/scripts/0.4.4/datamaps.all.min.js"></script>
+  
+  <div id="container1" style="position: relative; width: 800px; top: 180px; height: 460px; margin:auto;"></div>
+  <div id="containern" style="position: relative; top:300px; width: 800px;height: 460px; margin:auto;"></div>
+ <div id="containero" style="position: relative; width: 60%; top: 390px; margin: auto;"></div>
+ <div id= "para1" style="position: absolute; top: 100px; font-size: 17px;"><p>The airpline is of great significance as it is the most convenient transportation for either business or leisure purposes, especially in the long distance transport, it plays an important role among other alternatives. The number of airports in one country and city are far more vital since it makes the diverse air routes possible. Sometimes we want to know whether a given city has the direct route to another, and we end up searching from the capital, more famous city and etc. A visualized flight map can show each country, state or city the number of the airports, and gives the impression in a straight forward way.</p>
+ <p>I've used D3.js Datamap to create several maps below and the data used for create the maps is coming from "Openflight" dataset, downloaded on 12th Dec.2017. And used https://github.com/markmarkoh/datamaps for reference.</p>
+ </div>
+
+  <div id= "para11" style="position: absolute; top:660px; font-size: 17px;"><p>
+   The first map is the comparison of airports number in each country around the world. The result shows the United States has the most airports which is 22333 in total. 
+   Since the airports is of importance in representing the level of interaction between countries and cities, I explored whether the population density(population divided by land area) is one of the main factor in making the difference of airports number in different countries and cities. And want to see which country has relatively more airports than others(Like GDP, not simply rank the total amount of production, but compare it in per person). 
+   <p>The second map shows the rank of airports' amount after divided by the weight(population density), if the number of airports in country A and B are the same but A has the larger population density than B has, they will appear in the same color in the first map but A will be in much deeper in the second map. As the result shown, after divided by populatin density, Canada, Green Land, America, and Australia become the major among all the others, and some of the European, Asian and Middle Asian countries' rank drop after weighting.</p> 
+ </p></div>
+  <div id= "para111" style="position: absolute; top: 1300px; font-size: 17px;">
+  <p>The third map is the comparison of airports number in each state of America(There are two untracked aiports being deleted, which with wrong coordinates information and unknown municipality in the raw data). The result shows Taxes has the most airports which is 2213, and Rhode Island has the least airports which is 35 among all the other states.</p>
+  </div>
+  <div id= "para1111" style="position: absolute; top: 1990px; font-size: 17px;">
+     Since the population, land area, tourism, trade, and etc are some factors which may affect the number of airports in different regions, more details can be explored in the future. 
+  </div>
+     <script>
+
+       //basic map config with custom fills, mercator projection
+     var flightdataworld = {"ABW":1,"AFG":63,"AGO":104,"AIA":1,"ALB":12,"AND":2,"ARE":53,"ARG":827,"ARM":13,"ASM":4,"ATA":26,"ATF":4,"ATG":3,"AUS":1955,"AUT":141,"AZE":35,"BDI":7,"BEL":146,"BEN":10,"BES":3,"BFA":51,"BGD":16,"BGR":120,"BHR":4,"BHS":63,"BIH":15,"BLM":1,"BLR":52,"BLZ":22,"BMU":3,"BOL":197,"BRA":4188,"BRB":2,"BRN":2,"BTN":5,"BWA":126,"CAF":40,"CAN":2779,"CCK":1,"CHE":88,"CHL":474,"CHN":382,"CIV":26,"CMR":35,"COD":285,"COG":53,"COK":10,"COL":706,"COM":4,"CPV":10,"CRI":125,"CUB":134,"CUW":1,"CXR":1,"CYM":3,"CYP":11,"CZE":267,"DEU":933,"DJI":9,"DMA":2,"DNK":114,"DOM":39,"DZA":61,"ECU":123,"EGY":69,"ERI":6,"ESH":6,"ESP":404,"EST":36,"ETH":58,"FIN":111,"FJI":33,"FLK":39,"FRA":832,"FRO":8,"FSM":6,"GAB":35,"GBR":853,"GEO":28,"GGY":3,"GHA":9,"GIB":1,"GIN":16,"GLP":6,"GMB":1,"GNB":7,"GNQ":7,"GRC":85,"GRD":3,"GRL":84,"GTM":53,"GUF":12,"GUM":3,"GUY":38,"HKG":9,"HND":158,"HRV":47,"HTI":8,"HUN":107,"IDN":466,"IMN":5,"IND":338,"IOT":1,"IRL":99,"IRN":135,"IRQ":76,"ISL":85,"ISR":39,"ITA":663,"JAM":24,"JEY":1,"JOR":17,"JPN":233,"KAZ":126,"KEN":368,"KGZ":54,"KHM":14,"KIR":22,"KNA":2,"KOR":539,"KWT":8,"LAO":20,"LBN":4,"LBR":16,"LBY":60,"LCA":2,"LIE":1,"LKA":34,"LSO":33,"LTU":54,"LUX":10,"LVA":44,"MAC":1,"MAF":2,"MAR":36,"MCO":2,"MDA":8,"MDG":82,"MDV":12,"MEX":769,"MHL":34,"MKD":14,"MLI":31,"MLT":7,"MMR":75,"MNE":7,"MNG":29,"MNP":11,"MOZ":84,"MRT":24,"MSR":2,"MTQ":1,"MUS":3,"MWI":29,"MYS":105,"MYT":1,"NAM":246,"NCL":22,"NER":23,"NFK":1,"NGA":44,"NIC":32,"NIU":1,"NLD":86,"NOR":221,"NPL":48,"NRU":1,"NZL":209,"OMN":27,"PAK":132,"PAN":72,"PER":166,"PHL":145,"PLW":3,"PNG":591,"POL":252,"PRI":62,"PRK":91,"PRT":124,"PRY":69,"PSE":4,"PYF":55,"QAT":6,"REU":2,"ROU":56,"RUS":1019,"RWA":8,"SAU":77,"SDN":36,"SEN":16,"SGP":10,"SHN":2,"SLB":38,"SLE":12,"SLV":27,"SMR":2,"SOM":27,"SPM":2,"SRB":35,"SSD":46,"STP":4,"SUR":51,"SVK":107,"SVN":42,"SWE":218,"SWZ":16,"SXM":1,"SYC":17,"SYR":29,"TCA":10,"TCD":35,"TGO":7,"THA":68,"TJK":15,"TKM":21,"TLS":14,"TON":6,"TTO":3,"TUN":15,"TUR":124,"TUV":3,"TWN":63,"TZA":207,"UGA":38,"UKR":185,"UMI":6,"URY":37,"USA":22333,"UZB":175,"VAT":1,"VCT":6,"VEN":592,"VGB":3,"VIR":9,"VNM":47,"VUT":32,"WLF":2,"WSM":4,"YEM":25,"ZAF":480,"ZMB":101,"ZWE":136}
+
+     var flightdataper = {"ABW":0.001666667,"AFG":1.195012069,"AGO":6.794717535,"ALB":0.102589704,"AND":0.011076546,"ARE":0.589829606,"ARG":56.00422225,"ARM":0.119741268,"ASM":0.011692488,"ATG":0.015,"AUS":673.5233194,"AUT":1.38529559,"AZE":0.319383698,"BDI":0.021445956,"BEL":0.405734214,"BEN":0.12499435,"BFA":0.847316007,"BGD":0.014006941,"BGR":1.729121317,"BHR":0.002408875,"BHS":1.838571428,"BIH":0.203457447,"BLR":1.111342466,"BLZ":1.454550725,"BMU":0.002321981,"BOL":21.49361466,"BRA":181.7326386,"BRB":0.003138686,"BRN":0.02641604,"BTN":0.264393939,"BWA":35.57946188,"CAF":5.662167689,"CAN":740.5164475,"CHE":0.449782775,"CHL":20.59364527,"CHN":2.66240556,"CIV":0.418887425,"CMR":0.84416807,"COD":9.794728264,"COG":4.476749937,"COL":16.91990496,"COM":0.010122449,"CPV":0.08125,"CRI":1.369929169,"CUB":1.266917747,"CUW":0.003112112,"CYM":0.012804553,"CYP":0.092148685,"CZE":1.960622623,"DEU":3.97731795,"DJI":0.234668166,"DMA":0.022058824,"DNK":0.87200649,"DOM":0.189833787,"DZA":4.096259726,"ECU":2.111875562,"EGY":0.846711086,"ERI":0.115340693,"ESP":4.374014022,"EST":1.138835821,"ETH":0.699216395,"FIN":6.28875839,"FJI":0.70105814,"FRA":7.021390244,"FRO":0.228299253,"FSM":0.037837838,"GAB":5.992325582,"GBR":3.316079991,"GEO":0.359484277,"GHA":0.083956215,"GIB":0.00034195,"GIN":0.39386095,"GMB":0.00578369,"GNB":0.129927393,"GNQ":0.2805,"GRC":0.968230824,"GRD":0.009807692,"GRL":609.8595515,"GTM":0.394709848,"GUM":0.009050279,"GUY":9.907682119,"HKG":0.001326825,"HND":2.326134211,"HRV":0.595319149,"HTI":0.022063444,"HUN":0.968671,"IDN":3.519371409,"IMN":0.03439163,"IND":0.820615638,"IRL":1.524046927,"IRN":2.972087789,"IRQ":1.030511692,"ISL":26.79638365,"ISR":0.110697796,"ITA":3.224291453,"JAM":0.096195411,"JOR":0.249588226,"JPN":0.666361974,"KAZ":20.83944128,"KEN":5.169785501,"KGZ":1.901101322,"KHM":0.174784638,"KIR":0.1782,"KNA":0.01,"KOR":1.070831714,"KWT":0.052105263,"LAO":0.744396065,"LBN":0.009680625,"LBR":0.385858788,"LBY":16.6124941,"LCA":0.007011494,"LIE":0.004440497,"LKA":0.102211889,"LSO":0.461483187,"LTU":1.029564953,"LUX":0.051084813,"LVA":1.221938365,"MAC":0.0000515,"MAF":0.003598479,"MAR":0.502857501,"MCO":0.000112972,"MDA":0.06451881,"MDG":2.302128029,"MDV":0.011392405,"MEX":13.17984492,"MHL":0.113253636,"MKD":0.171398058,"MLI":2.46102082,"MLT":0.005384615,"MMR":1.021912724,"MNE":0.148971519,"MNG":16.34732946,"MNP":0.083063841,"MOZ":2.824109449,"MRT":7.149364162,"MUS":0.004754098,"MWI":0.183485672,"MYS":1.214666737,"MYT":0.001813725,"NAM":88.71193168,"NCL":1.628178138,"NER":1.878165291,"NGA":0.252954937,"NIC":0.665206426,"NLD":0.174577516,"NOR":13.80831868,"NPL":0.229673888,"NZL":12.59885302,"OMN":3.002694933,"PAK":0.586176632,"PAN":1.521887973,"PER":7.307745219,"PHL":0.463587673,"PLW":0.067409144,"PNG":39.02599299,"POL":2.00760528,"PRI":0.138245349,"PRK":0.45006613,"PRT":1.066204173,"PRY":4.247551905,"PSE":0.005799615,"PYF":0.742804428,"QAT":0.039533826,"ROU":0.600959045,"RUS":117.7286104,"RWA":0.018576807,"SAU":6.030535192,"SDN":1.963997061,"SEN":0.247746502,"SGP":0.001378767,"SLB":1.976988848,"SLE":0.146487131,"SLV":0.090334248,"SMR":0.003805416,"SOM":1.815258815,"SRB":0.419846386,"SSD":null,"STP":0.023272727,"SUR":15.15428572,"SVK":0.947629834,"SVN":0.412825768,"SWE":9.538720411,"SWZ":0.260606061,"SXM":0.000898272,"SYC":0.089885057,"SYR":0.260442608,"TCA":0.247692548,"TCD":3.925536653,"TGO":0.063160252,"THA":0.502597147,"TJK":0.305189708,"TKM":1.957264974,"TLS":0.185213523,"TON":0.041538462,"TTO":0.01147651,"TUN":0.220911935,"TUR":1.311773147,"TUV":0.009158441,"TZA":4.089128253,"UGA":0.22716551,"UKR":2.336426065,"URY":1.929025916,"USA":660.3846493,"UZB":2.637275046,"VCT":0.02146789,"VEN":18.10964833,"VIR":0.028636364,"VNM":0.167647823,"VUT":1.625333334,"WSM":0.061521739,"YEM":0.548756912,"ZAF":11.66101098,"ZMB":5.808183647,"ZWE":4.185156312}
+     
+     var flightdataus = {"AK":822,"AL":355,"AR":397,"AZ":355,"CA":1076,"CO":503,"CT":162,"DC":21,"DE":56,"FL":942,"GA":517,"HI":64,"IA":337,"ID":311,"IL":885,"IN":689,"KS":435,"KY":255,"LA":586,"MA":255,"MD":254,"ME":195,"MI":530,"MN":557,"MO":570,"MS":279,"MT":311,"NC":462,"ND":317,"NE":306,"NH":175,"NJ":439,"NM":194,"NV":152,"NY":654,"OH":782,"OK":504,"OR":490,"PA":903,"RI":35,"SC":215,"SD":202,"TN":352,"TX":2213,"UT":167,"VA":498,"VT":100,"WA":571,"WI":617,"WV":137,"WY":127}
+   var dataset1 ={};
+   var dataset11 ={};
+   var dataset111 ={};
+   var onlyValues1 =  Object.keys(flightdataworld).map(function(key){ return flightdataworld[key] });
+  var onlyValues11 =  Object.keys(flightdataper).map(function(key){ return flightdataper[key] });
+  var onlyValues111 =  Object.keys(flightdataus).map(function(key){ return flightdataus[key] });
+   var minValue1 = Math.min.apply(null, onlyValues1),maxValue1 = Math.max.apply(null, onlyValues1);
+   var minValue11 = Math.min.apply(null, onlyValues11),maxValue11 = Math.max.apply(null, onlyValues11);
+   var minValue111 = Math.min.apply(null, onlyValues111),maxValue111 = Math.max.apply(null, onlyValues111);
+   //console.log(onlyValues);
+ var paletteScale1 = d3.scale.log().base(4).domain([minValue1,maxValue1]).range(["#FFFFFF","#00008B"]);
+ var paletteScale11 = d3.scale.sqrt().domain([minValue11,maxValue11]).range(["#FFFFFF","#00008B"]);
+ var paletteScale111 = d3.scale.sqrt().domain([minValue111,maxValue111]).range(["#FFFFFF","#ff0033"]);
+   Object.keys(flightdataworld).forEach(function(key){
+
+    var iso = key, value = flightdataworld[key];
+    dataset1[iso] = {number:value,fillColor:paletteScale1(value)};
+   });
+    Object.keys(flightdataper).forEach(function(key){
+
+    var iso = key, value = flightdataper[key];
+    dataset11[iso] = {number:value,fillColor:paletteScale11(value)};
+   });
+     Object.keys(flightdataus).forEach(function(key){
+
+    var iso = key, value = flightdataus[key];
+    dataset111[iso] = {number:value,fillColor:paletteScale111(value)};
+   });
+         var mapworld = new Datamap({
+        element: document.getElementById('container1'),
+        //projection:'mercator',
+        fills: { defaultFill: '#F5F5F5' },
+        data: dataset1,
+        geographyConfig: {
+            borderColor: '#DEDEDE',
+            highlightBorderWidth: 1,
+            highlightFillColor: function(geo) {
+                return geo['fillColor'] || '#F5F5F5';
+            },
+            // show desired information in tooltip
+            popupTemplate: function(geo, data) {
+                // don't show tooltip if country don't present in dataset
+                if (!data) { return ; }
+                // tooltip content
+                return ['<div class="hoverinfo">',
+                    '<strong>', geo.properties.name, '</strong>',
+                    '<br>Count: <strong>', data.number, '</strong>',
+                    '</div>'].join('');
+            }
+        }
+    });
+
+          var mapper = new Datamap({
+        element: document.getElementById('containern'),
+        //projection:'mercator',
+        fills: { defaultFill: '#F5F5F5' },
+        data: dataset11,
+        geographyConfig: {
+            borderColor: '#DEDEDE',
+            highlightBorderWidth: 1,
+            highlightFillColor: function(geo) {
+                return geo['fillColor'] || '#F5F5F5';
+            },
+            // show desired information in tooltip
+            popupTemplate: function(geo, data) {
+                // don't show tooltip if country don't present in dataset
+                if (!data) { return ; }
+                // tooltip content
+                return ['<div class="hoverinfo">',
+                    '<strong>', geo.properties.name, '</strong>',
+                    '<br>Count: <strong>', data.number, '</strong>',
+                    '</div>'].join('');
+            }
+        }
+    });
+    var mapus = new Datamap({
+          scope:'usa',
+        element: document.getElementById('containero'),
+        projection:'mercator',
+        fills: { defaultFill: '#F5F5F5' },
+        data: dataset111,
+        height: 600,
+        geographyConfig: {
+            borderColor: '#DEDEDE',
+            highlightBorderWidth: 1,
+            highlightFillColor: function(geo) {
+                return geo['fillColor'] || '#F5F5F5';
+            },
+            // show desired information in tooltip
+            popupTemplate: function(geo, data) {
+                // don't show tooltip if country don't present in dataset
+                if (!data) { return ; }
+                // tooltip content
+                return ['<div class="hoverinfo">',
+                    '<strong>', geo.properties.name, '</strong>',
+                    '<br>Count: <strong>', data.number, '</strong>',
+                    '</div>'].join('');
+            }
+        }
+    });
+  
+  
+     </script>
+</body>
+</html>
